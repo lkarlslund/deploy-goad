@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 echo "Deploy GOAD v2 on Ubuntu 22.04"
 
 # Ensure we're on the right OS and version
@@ -56,7 +56,7 @@ vagrant plugin install winrm-elevated
 cd /opt/goad
 vagrant up
 
-if [ $? -nq 0 ]; then
+if [ $? -ne 0 ]; then
   echo "Deployment failed"
   exit 1
 fi
