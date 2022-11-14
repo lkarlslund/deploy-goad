@@ -1,9 +1,9 @@
 #!/bin/bash
-echo "Deploy GOAD v2 on Ubuntu 22.04"
+echo "Deploy GOAD v2 on Ubuntu 22.04.1 LTS"
 
 # Ensure we're on the right OS and version
-if [ "`lsb_release -sd`" != "Ubuntu 22.04 LTS" ]; then
-  echo "This script must be run on Ubuntu 22.04 LTS"
+if [ "`lsb_release -sd`" != "Ubuntu 22.04.1 LTS" ]; then
+  echo "This script must be run on Ubuntu 22.04.1 LTS"
   exit 1
 fi
 
