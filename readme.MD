@@ -29,7 +29,7 @@ cd deploy-goad
 ./deploy-goad.sh
 ```
 
-Get coffee, this is the longest part
+Get coffee, this is the longest part. Should you get an error while the deployment is running, try re-running the script again, this can fix download problems, timeouts etc. The GOAD script only deploys the VMs once, it doesn't start all over.
 
 After running the script you have the GOAD repository available in /opt/goad, and the VMs are deployed.
 
