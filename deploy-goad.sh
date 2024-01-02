@@ -31,6 +31,13 @@ fi
 # Install base packages needed
 apt-get install -y git virtualbox python3-pip
 
+# Enable IP forwarding on Ubuntu
+if [ "`cat /proc/sys/net/ipv4/ip_forward`" != "1" ]; then
+  # Implement in sysctl
+  echo net.ipv4.ip_forward = 1 >> /etc/sysctl.conf
+  sysctl -p
+fi
+
 # Download GOAD
 cd /opt
 git clone https://github.com/Orange-Cyberdefense/GOAD goad
@@ -61,9 +68,4 @@ if [ $? -ne 0 ]; then
   exit 1
 fi
 
-# Configure VMs
-echo "Wait some minutes for VMs to settle, then configure them:"
-echo .
-echo "Run these commands:"
-echo "# cd /opt/goad/ansible"
-echo "# ansible-playbook main.yml"
+echo "Deployment succeeded, your lab is now up and running on the 192.168.56.0/24 network"
