@@ -1,9 +1,9 @@
 #!/bin/bash
-echo "Deploy GOAD v2 on Ubuntu 22.04.1 LTS"
+echo "Deploy GOAD v2 on Ubuntu 22.04"
 
 # Ensure we're on the right OS and version
-if [ "`lsb_release -sd`" != "Ubuntu 22.04.1 LTS" ]; then
-  echo "This script must be run on Ubuntu 22.04.1 LTS"
+if [ "`lsb_release -sd | cut -c -12`" != "Ubuntu 22.04" ]; then
+  echo "This script must be run on Ubuntu 22.04"
   exit 1
 fi
 
@@ -20,7 +20,7 @@ add-apt-repository -y multiverse
 apt-get update
 
 # Make sure we're running on latest versions of things installed
-apt-get -y autoupdate
+apt-get -y dist-upgrade
 
 # Check if we're running inside VirtualBox
 if [ `dmidecode -s system-product-name` = "VirtualBox" ]; then
@@ -36,8 +36,8 @@ cd /opt
 git clone https://github.com/Orange-Cyberdefense/GOAD goad
 
 # Install specific version of Vagrant
-wget https://releases.hashicorp.com/vagrant/2.2.18/vagrant_2.2.18_x86_64.deb
-dpkg --install vagrant_2.2.18_x86_64.deb
+wget https://releases.hashicorp.com/vagrant/2.4.0/vagrant_2.4.0-1_amd64.deb
+dpkg --install vagrant_2.4.0-1_amd64.deb
 
 # Set up prerequisites, not doing a venv but could be changed to that
 cd /opt/goad/ansible
@@ -54,7 +54,7 @@ vagrant plugin install winrm-elevated
 
 # Deploy VMs
 cd /opt/goad
-vagrant up
+./goad.sh -t install -l GOAD -p virtualbox -m local
 
 if [ $? -ne 0 ]; then
   echo "Deployment failed"
