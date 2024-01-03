@@ -38,28 +38,30 @@ if [ "`cat /proc/sys/net/ipv4/ip_forward`" != "1" ]; then
   sysctl -p
 fi
 
-# Download GOAD
-cd /opt
-git clone https://github.com/Orange-Cyberdefense/GOAD goad
-
-# Install specific version of Vagrant
-wget https://releases.hashicorp.com/vagrant/2.4.0/vagrant_2.4.0-1_amd64.deb
-dpkg --install vagrant_2.4.0-1_amd64.deb
+# Check if vagrant is installed
+if ! dpkg -s vagrant &> /dev/null; then
+  wget https://releases.hashicorp.com/vagrant/2.4.0/vagrant_2.4.0-1_amd64.deb
+  dpkg --install vagrant_2.4.0-1_amd64.deb
+fi
 
 # Set up prerequisites, not doing a venv but could be changed to that
-cd /opt/goad/ansible
 pip install --upgrade pip
 pip install ansible-core==2.12.6
 pip install pywinrm
-
-# Install stuff needed for Ansible
-ansible-galaxy install -r requirements.yml
 
 # Install stuff needed for Vagrant
 vagrant plugin install winrm
 vagrant plugin install winrm-elevated
 
-# Deploy VMs
+# Download GOAD
+if [ ! -d /opt/goad ]; then
+  git clone https://github.com/lkarlslund/GOAD /opt/goad
+fi
+
+# Install GOAD stuff needed for Ansible
+ansible-galaxy install -r /opt/goad/ansible/requirements.yml
+
+# Switch to GOAD folder and deploy VMs
 cd /opt/goad
 ./goad.sh -t install -l GOAD -p virtualbox -m local
 
